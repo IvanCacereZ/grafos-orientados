@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Listas<T> : MonoBehaviour 
+public class Listas<T>
 {
     class Node
     {

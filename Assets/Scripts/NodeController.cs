@@ -8,32 +8,40 @@ public class NodeController : MonoBehaviour
     Listas<float> Values;
     private float positionX;
     private float positionY;
+    private float positionZ;
     public string NodeTag;
     float cost = 0f;
+    private void Awake()
+    {
+        AdjacentNodes = new Listas<NodeController>();
+        Values = new Listas<float>();
+    }
     public NodeController SelectNextNode()
     {
         int nodeSelected = Random.Range(0, AdjacentNodes.GetCount());
         cost = Values.GetNodeAtPosition(nodeSelected);
         return AdjacentNodes.GetNodeAtPosition(nodeSelected);
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.tag == "MoveObject")
+        if (other.gameObject.tag == "MoveObject")
         {
             NodeController selected = SelectNextNode();
-            collision.GetComponent<MoveController>().UpdateEnergy(cost);
-            collision.GetComponent<MoveController>().ChangeMovePosition(selected.gameObject.transform.position);
+            other.GetComponent<MoveController>().UpdateEnergy(cost);
+            other.GetComponent<MoveController>().ChangeMovePosition(selected.GetComponent<Transform>().position);
         }
     }
-    public void SetInitialValues(float posX, float posY,string tag)
+    public void SetInitialValues(float posX, float posY, float posZ, string tag)
     {
         positionX = posX;
         positionY = posY;
+        positionZ = posZ;
         NodeTag = tag;
-        transform.position = new Vector2(positionX, positionY);
+        transform.position = new Vector3(positionX, positionY, positionZ);
     }
-    public void AddAdjacentNode(NodeController node)
+    public void AddAdjacentNode(NodeController node,float value)
     {
         AdjacentNodes.AddNodeToEnd(node);
+        Values.AddNodeToEnd(value);
     }
 }
